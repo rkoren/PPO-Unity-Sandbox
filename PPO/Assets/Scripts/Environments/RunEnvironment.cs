@@ -87,9 +87,9 @@ public class RunEnvironment : Environment
 
         // Torso kinematics
         state.values[i++, 0, 0] = Mathf.Clamp(runner.torso.transform.position.y / 1.2f - 1f, -1f, 1f);
-        state.values[i++, 0, 0] = Mathf.Tanh(vel.z / 5f);
-        state.values[i++, 0, 0] = Mathf.Tanh(vel.x / 3f);
-        state.values[i++, 0, 0] = Mathf.Tanh(vel.y / 3f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(vel.z / 5f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(vel.x / 3f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(vel.y / 3f);
 
         // Torso orientation
         state.values[i++, 0, 0] = Mathf.Clamp(runner.torso.transform.forward.y, -1f, 1f); // pitch
@@ -102,10 +102,10 @@ public class RunEnvironment : Environment
         state.values[i++, 0, 0] = Mathf.Clamp(runner.rightKnee.angle / 90f, -1f, 1f);
 
         // Limb angular velocities
-        state.values[i++, 0, 0] = Mathf.Tanh(runner.leftThigh.angularVelocity.x  / 5f);
-        state.values[i++, 0, 0] = Mathf.Tanh(runner.rightThigh.angularVelocity.x / 5f);
-        state.values[i++, 0, 0] = Mathf.Tanh(runner.leftShin.angularVelocity.x   / 5f);
-        state.values[i++, 0, 0] = Mathf.Tanh(runner.rightShin.angularVelocity.x  / 5f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(runner.leftThigh.angularVelocity.x  / 5f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(runner.rightThigh.angularVelocity.x / 5f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(runner.leftShin.angularVelocity.x   / 5f);
+        state.values[i++, 0, 0] = (float)System.Math.Tanh(runner.rightShin.angularVelocity.x  / 5f);
 
         // Foot ground contact
         state.values[i++, 0, 0] = runner.leftFootContact.isGrounded  ? 1f : 0f;

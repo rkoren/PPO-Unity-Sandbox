@@ -91,7 +91,7 @@ public class PhysicsManager : MonoBehaviour
                 timer -= Time.fixedDeltaTime * Time.timeScale;
 
                 Physics.Simulate(Time.fixedDeltaTime * Time.timeScale);
-                Physics.autoSyncTransforms = true;
+                Physics.SyncTransforms();
 
                 for (int env = 0; env < ENVIRONMENTS; env++)
                 {
@@ -104,7 +104,7 @@ public class PhysicsManager : MonoBehaviour
             for (int step = 0; step < STEPS; step++)
             {
                 Physics.Simulate(Time.fixedDeltaTime * Time.timeScale);
-                Physics.autoSyncTransforms = true;
+                Physics.SyncTransforms();
 
                 for (int env = 0; env < ENVIRONMENTS; env++)
                 {
