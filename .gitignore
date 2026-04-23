@@ -70,3 +70,8 @@ PPO/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 # Temporary auto-generated Android Assets
 PPO/[Aa]ssets/[Ss]treamingAssets/aa.meta
 PPO/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Trained network checkpoints — commit selectively when you want to ship a demo network
+PPO/[Aa]ssets/[Ss]treamingAssets/[Nn]etworks/*.txt
+
+Claude.md

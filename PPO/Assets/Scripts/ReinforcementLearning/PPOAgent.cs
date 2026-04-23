@@ -7,8 +7,8 @@ using NeuralNetwork.Layers;
 
 public class PPOAgent
 {
-    public int STATE_SIZE = 20;
-    public int ACTION_SIZE = 6;
+    public int STATE_SIZE = 16;
+    public int ACTION_SIZE = 4;
 
     public float ACTION_MIN = -1.0f;
     public float ACTION_MAX = 1.0f;

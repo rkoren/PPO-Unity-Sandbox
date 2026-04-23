@@ -36,7 +36,7 @@ public class PhysicsManager : MonoBehaviour
         UnitTester unitTester = new UnitTester();
         bool success = unitTester.AssertAll();
 
-        Physics.autoSimulation = false;
+        Physics.simulationMode = SimulationMode.Script;
 
         PPOAgent agent = new PPOAgent();
 
@@ -64,7 +64,7 @@ public class PhysicsManager : MonoBehaviour
 
     void Update()
     {
-        if (Physics.autoSimulation)
+        if (Physics.simulationMode != SimulationMode.Script)
         {
             return;
         }

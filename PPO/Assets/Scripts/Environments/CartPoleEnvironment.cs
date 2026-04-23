@@ -97,7 +97,7 @@ public class CartPoleEnvironment : Environment
 
         poleBody.transform.position = polePosition;
         poleBody.transform.rotation = poleRotation;
-        poleBody.velocity = Vector3.zero;
+        poleBody.linearVelocity = Vector3.zero;
         poleBody.angularVelocity = Vector3.zero;
 
         base.ResetEnvironment();

@@ -24,6 +24,12 @@ public class Bootstrap : MonoBehaviour
     void Start()
     {
         instance = this;
+
+        if (string.IsNullOrEmpty(folderPath))
+            folderPath = Path.Combine(Application.streamingAssetsPath, "Networks");
+
+        Directory.CreateDirectory(folderPath);
+
         nextCheckpoint += PPOAgent.totalSteps + checkpointInterval + 1;
     }
 
@@ -45,35 +51,35 @@ public class Bootstrap : MonoBehaviour
 
     public bool Exists(string existingId)
     {
-        string path1 = folderPath + "\\" + existingId + "_value.txt";
-        string path2 = folderPath + "\\" + existingId + "_mu.txt";
-        string path3 = folderPath + "\\" + existingId + "_sigma.txt";
-        string path4 = folderPath + "\\" + existingId + "_running.txt";
+        string path1 = Path.Combine(folderPath, existingId + "_value.txt");
+        string path2 = Path.Combine(folderPath, existingId + "_mu.txt");
+        string path3 = Path.Combine(folderPath, existingId + "_sigma.txt");
+        string path4 = Path.Combine(folderPath, existingId + "_running.txt");
 
         return File.Exists(path1) && File.Exists(path2) && File.Exists(path3) && File.Exists(path4);
     }
 
     public void LoadFromFile(string existingId)
     {
-        using (StreamReader sr = File.OpenText(folderPath + "\\" + existingId + "_value.txt"))
+        using (StreamReader sr = File.OpenText(Path.Combine(folderPath, existingId + "_value.txt")))
         {
             string data = sr.ReadToEnd();
             agent.valueNetwork = DeserialiseNetwork(data);
         }
 
-        using (StreamReader sr = File.OpenText(folderPath + "\\" + existingId + "_mu.txt"))
+        using (StreamReader sr = File.OpenText(Path.Combine(folderPath, existingId + "_mu.txt")))
         {
             string data = sr.ReadToEnd();
             agent.muHead = DeserialiseNetwork(data);
         }
 
-        using (StreamReader sr = File.OpenText(folderPath + "\\" + existingId + "_sigma.txt"))
+        using (StreamReader sr = File.OpenText(Path.Combine(folderPath, existingId + "_sigma.txt")))
         {
             string data = sr.ReadToEnd();
             agent.sigmaHead = DeserialiseNetwork(data);
         }
 
-        using (StreamReader sr = File.OpenText(folderPath + "\\" + existingId + "_running.txt"))
+        using (StreamReader sr = File.OpenText(Path.Combine(folderPath, existingId + "_running.txt")))
         {
             string data = sr.ReadToEnd();
 
@@ -98,25 +104,27 @@ public class Bootstrap : MonoBehaviour
     {
         int rewardRound = (int)Mathf.Max(0.0f, rewardMean);
 
-        using (StreamWriter sw = File.CreateText(folderPath + "\\" + runId + "_" + counter.ToString() + "_" + rewardRound.ToString() + "_value.txt"))
+        string prefix = Path.Combine(folderPath, runId + "_" + counter.ToString() + "_" + rewardRound.ToString());
+
+        using (StreamWriter sw = File.CreateText(prefix + "_value.txt"))
         {
             string valueString = SerialiseNetwork(agent.valueNetwork);
             sw.WriteLine(valueString);
         }
 
-        using (StreamWriter sw = File.CreateText(folderPath + "\\" + runId + "_" + counter.ToString() + "_" + rewardRound.ToString() + "_mu.txt"))
+        using (StreamWriter sw = File.CreateText(prefix + "_mu.txt"))
         {
             string muString = SerialiseNetwork(agent.muHead);
             sw.WriteLine(muString);
         }
 
-        using (StreamWriter sw = File.CreateText(folderPath + "\\" + runId + "_" + counter.ToString() + "_" + rewardRound.ToString() + "_sigma.txt"))
+        using (StreamWriter sw = File.CreateText(prefix + "_sigma.txt"))
         {
             string sigmaString = SerialiseNetwork(agent.sigmaHead);
             sw.WriteLine(sigmaString);
         }
 
-        using (StreamWriter sw = File.CreateText(folderPath + "\\" + runId + "_" + counter.ToString() + "_" + rewardRound.ToString() + "_running.txt"))
+        using (StreamWriter sw = File.CreateText(prefix + "_running.txt"))
         {
             string runningString = "";
 

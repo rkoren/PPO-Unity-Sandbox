@@ -1,46 +1,67 @@
-Load the Unity scene to start
-Press the Spacebar to start the simulation
+PPO-Unity-Sandbox
+=================
+A sandbox for building reinforcement learning experiments in Unity.
+Inspired by b2studios (https://www.youtube.com/@b2studios).
 
-The AI uses compute shaders to speed up matrix calculations, so if you don't have a GPU
-it will probably cause some issues / significant speed losses.
+Implements PPO entirely in C# with GPU-accelerated matrix math.
+No Python. No ML-Agents. No external dependencies.
 
-PROJECT SETTINGS
-fixed timestep = 0.01 - the AI runs 100 times per second (mainly for stability of physics)
-physics.autosimulation = false - the AI runs the physics
 
-BOOTSTRAP (unity object)
+REQUIREMENTS
+------------
+- Unity 6 (6000.0.x) — install via Unity Hub
+- A GPU (required for compute-shader matrix multiplication)
+
+
+QUICK START
+-----------
+1. Open the PPO/ folder as a Unity project in Unity Hub
+2. Let Unity resolve packages on first open (accept URP upgrade if prompted)
+3. Open or create a scene, assign a RunEnvironment + Bootstrap + PhysicsManager
+4. Press Spacebar to start
+
+
+BOOTSTRAP (Inspector)
+---------------------
+TESTING       true  = watch a saved network run
+              false = train from scratch (or from a checkpoint)
+
+LOAD_ID       name of the network to load from the Networks folder
+              leave blank to start fresh training
+
+RUN_ID        name used when saving new checkpoints
+
+FOLDER_PATH   leave blank — defaults to Assets/StreamingAssets/Networks/
+
+CHECKPOINT_INTERVAL   how many steps between automatic saves (default 65536)
+
+
+PHYSICS MANAGER (Inspector)
 ----------------------------
-the networks are stored in 4 text files: mu, sigma, value and running. mu and sigma store
-the actor's neural network, while value stores the critic's neural network. Running
-stores some moving averages that make the training more efficient
+MODE          REALTIME = run at normal speed
+              FAST     = run STEPS physics frames per Unity frame (faster training)
 
-TESTING - true (shows the AI running), false (actually trains the AI)
+ENVIRONMENTS  list of active Environment components in the scene
 
-LOAD_ID - the name of the network you want to load. If it doesn't exist
-          the app will create one
 
-FOLDER_PATH - the path of the folder containing your neural networks
+NETWORKS
+--------
+Trained networks are saved to Assets/StreamingAssets/Networks/ as 4 text files:
+  {name}_mu.txt       actor mean weights
+  {name}_sigma.txt    actor std dev weights
+  {name}_value.txt    critic weights
+  {name}_running.txt  state normalisation statistics
 
-RUN_ID - the name of the AI, when new training sessions finish, the AI will be saved
-         under this name with it's performance statistics along side it
+Network files are gitignored by default. Commit them manually when you want
+to ship a demo.
 
-COUNTER - keeps track of the current training session, you'll need to set this manually
-          to the highest number if you start the application multiple times
 
-NEXT_CHECKPOINT - milestone for timesteps, after this number is reached the AI is saved
-
-CHECKPOINT_INTERVAL - how far apart should automatic saves be?
-
-i've included several AI shown in my video that you can load up using the LOAD_ID
-----------------------------
-
-PHYSICS MANAGER (unity object)
-----------------------------
-the simulation is managed by this object
-
-MODE - REALTIME (runs at normal speed), FAST (runs as fast as possible)
-
-ENVIRONMENTS - a list of all the active environments, you can add more than one if you like
-
-STEPS - how many steps does the FAST mode do at a time?
-----------------------------
+CREATING A NEW EXPERIMENT
+--------------------------
+See CLAUDE.md for the full guide and the 100m Sprint setup walkthrough.
+Short version:
+1. Create a new scene
+2. Build your agent as a hierarchy of Rigidbodies + Joints
+3. Write an Environment subclass (see RunEnvironment.cs as the template)
+4. Wire everything up in the Inspector
+5. Set TESTING=false and hit Play
